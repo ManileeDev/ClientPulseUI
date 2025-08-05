@@ -8,6 +8,7 @@ const ClientFeedback = ({ user, onOpenAuth }) => {
   const [category, setCategory] = useState('')
   const [priority, setPriority] = useState('medium')
   const [rating, setRating] = useState(0)
+  const [isAnonymous, setIsAnonymous] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
   const [error, setError] = useState('')
@@ -134,8 +135,7 @@ const ClientFeedback = ({ user, onOpenAuth }) => {
         category,
         priority,
         rating,
-        clientId: user._id,
-        clientName: user.name // Add client name from user object
+        isAnonymous: isAnonymous
       }
       
       const response = await feedbackAPI.create(feedbackData)
@@ -150,6 +150,7 @@ const ClientFeedback = ({ user, onOpenAuth }) => {
           setCategory('')
           setPriority('medium')
           setRating(0)
+          setIsAnonymous(false)
           setShowSuccess(false)
         }, 3000)
       }
@@ -342,6 +343,30 @@ const ClientFeedback = ({ user, onOpenAuth }) => {
                 {ratingOptions.find(r => r.value === rating)?.emoji} {ratingOptions.find(r => r.value === rating)?.label}
               </p>
             )}
+          </div>
+
+          {/* Anonymous Submission Option */}
+          <div className="form-group">
+            <div className="checkbox-group">
+              <input
+                type="checkbox"
+                id="anonymous"
+                className="checkbox"
+                checked={isAnonymous}
+                onChange={(e) => setIsAnonymous(e.target.checked)}
+              />
+              <label htmlFor="anonymous" className="checkbox-label">
+                Submit feedback anonymously
+              </label>
+            </div>
+            <p style={{ 
+              fontSize: '0.875rem', 
+              color: 'var(--text-secondary)', 
+              marginTop: '0.5rem',
+              marginLeft: '1.75rem'
+            }}>
+              Your feedback will be shown as "Anonymous" instead of your name
+            </p>
           </div>
 
           {/* Error Display */}

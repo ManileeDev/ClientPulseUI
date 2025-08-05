@@ -94,7 +94,8 @@ const OTPVerification = () => {
             state: { 
               message: 'Account created successfully! Please log in with your credentials.',
               type: 'success',
-              showLogin: true
+              showLogin: true,
+              forceLoginMode: true
             }
           });
         }, 2000);
@@ -251,12 +252,25 @@ const OTPVerification = () => {
       </div>
 
       <style jsx>{`
+        /* Import CSS variables from the main app */
+        :root {
+          --bg-gradient: linear-gradient(135deg, #0d9488 0%, #06b6d4 50%, #3b82f6 100%);
+          --accent-primary: #0d9488;
+          --accent-secondary: #06b6d4;
+        }
+
+        [data-theme="dark"] {
+          --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+          --accent-primary: #14b8a6;
+          --accent-secondary: #22d3ee;
+        }
+
         .otp-verification-container {
           min-height: 100vh;
           display: flex;
           align-items: center;
           justify-content: center;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          background: var(--bg-gradient);
           padding: 20px;
         }
 
@@ -300,7 +314,7 @@ const OTPVerification = () => {
           display: flex;
           justify-content: center;
           margin-bottom: 16px;
-          color: #667eea;
+          color: var(--accent-primary);
         }
 
         .otp-header h2 {
@@ -338,8 +352,12 @@ const OTPVerification = () => {
 
         .otp-input:focus {
           outline: none;
-          border-color: #667eea;
-          box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+          border-color: var(--accent-primary);
+          box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+        }
+
+        [data-theme="dark"] .otp-input:focus {
+          box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15);
         }
 
         .otp-input:disabled {
@@ -371,7 +389,7 @@ const OTPVerification = () => {
 
         .verify-button {
           width: 100%;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
           color: white;
           border: none;
           padding: 14px;
@@ -410,7 +428,7 @@ const OTPVerification = () => {
         .resend-button {
           background: none;
           border: none;
-          color: #667eea;
+          color: var(--accent-primary);
           cursor: pointer;
           font-size: 14px;
           font-weight: 600;

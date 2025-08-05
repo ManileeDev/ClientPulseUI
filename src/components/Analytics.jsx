@@ -276,14 +276,25 @@ const Analytics = () => {
                   {item.description || 'No description provided'}
                 </p>
                 <div style={{ marginTop: '0.5rem', fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>
-                  {item.category && (
-                    <span style={{ marginRight: '1rem' }}>Category: {item.category}</span>
-                  )}
-                  {item.createdAt && (
-                    <span>
-                      {new Date(item.createdAt).toLocaleDateString()}
-                    </span>
-                  )}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                    {item.isAnonymous ? (
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                        👤 Anonymous
+                      </span>
+                    ) : (
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                        👤 {item.userName}
+                      </span>
+                    )}
+                    {item.category && (
+                      <span>Category: {item.category}</span>
+                    )}
+                    {item.createdAt && (
+                      <span>
+                        {new Date(item.createdAt).toLocaleDateString()}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}

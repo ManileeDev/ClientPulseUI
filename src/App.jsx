@@ -11,6 +11,7 @@ import MyFeedbacks from './components/MyFeedbacks'
 import OTPVerification from './components/OTPVerification'
 import CreateFeature from './components/CreateFeature'
 import FeatureManagement from './components/FeatureManagement'
+import LandingPage from './components/LandingPage'
 import './App.css'
 
 function AppContent() {
@@ -18,8 +19,10 @@ function AppContent() {
   const [userRole, setUserRole] = useState('client') // 'client' or 'developer'
   const [theme, setTheme] = useState('light') // 'light' or 'dark'
   const [showAuthModal, setShowAuthModal] = useState(false)
+  const [forceLoginMode, setForceLoginMode] = useState(false)
   const [showCreateFeature, setShowCreateFeature] = useState(false)
   const [toast, setToast] = useState(null)
+  const [showLandingPage, setShowLandingPage] = useState(true) // Show landing page initially
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -64,6 +67,10 @@ function AppContent() {
       if (location.state.showLogin) {
         setTimeout(() => {
           setShowAuthModal(true);
+          // Force login mode if specified
+          if (location.state.forceLoginMode) {
+            setForceLoginMode(true);
+          }
         }, 1000);
       }
       
@@ -82,8 +89,6 @@ function AppContent() {
 
   // Authentication handlers
   const handleAuthSuccess = (userData) => {
-    console.log('Authentication success, user data:', userData);
-    console.log('User ID field:', userData._id || userData.id);
     setUser(userData)
     setUserRole(userData.role)
     
@@ -121,10 +126,17 @@ function AppContent() {
     }
   }
 
+  const handleLandingComplete = () => {
+    setShowLandingPage(false)
+  }
 
+  // Show landing page first
+  if (showLandingPage) {
+    return <LandingPage onComplete={handleLandingComplete} />
+  }
 
   return (
-    <div className="app">
+    <div className="app app-fade-in">
       {/* Header */}
       <header className="header">
         <div className="header-content">
@@ -253,8 +265,12 @@ function AppContent() {
       {/* Authentication Modal */}
       <AuthModal 
         isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
+        onClose={() => {
+          setShowAuthModal(false);
+          setForceLoginMode(false);
+        }}
         onAuthSuccess={handleAuthSuccess}
+        forceLoginMode={forceLoginMode}
       />
 
       {/* Create Feature Modal */}

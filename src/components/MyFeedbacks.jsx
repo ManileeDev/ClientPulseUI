@@ -18,8 +18,6 @@ const MyFeedbacks = ({ user, onOpenAuth }) => {
     const fetchData = async () => {
       try {
         setLoading(true)
-        console.log('Fetching data for user:', user);
-        console.log('User ID:', user._id);
         
         const [feedbackRes, categoriesRes, prioritiesRes, ratingsRes] = await Promise.all([
           feedbackAPI.getByUserId(user._id),
@@ -27,8 +25,6 @@ const MyFeedbacks = ({ user, onOpenAuth }) => {
           configAPI.getPriorityOptions(),
           configAPI.getRatingOptions()
         ])
-        
-        console.log('Feedback response:', feedbackRes);
 
         if (feedbackRes.success) {
           setFeedbacks(feedbackRes.feedback)
@@ -366,6 +362,14 @@ const MyFeedbacks = ({ user, onOpenAuth }) => {
                         <Calendar size={14} />
                         <span>{new Date(feedback.createdAt).toLocaleDateString()}</span>
                       </div>
+                      {feedback.isAnonymous && (
+                        <div className="detail-item">
+                          👤
+                          <span style={{ color: 'var(--text-secondary)', fontStyle: 'italic' }}>
+                            Submitted anonymously
+                          </span>
+                        </div>
+                      )}
                     </div>
 
                     <div className="feedback-actions">

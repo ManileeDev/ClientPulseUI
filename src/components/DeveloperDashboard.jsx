@@ -138,7 +138,7 @@ const DeveloperDashboard = ({ user, onCreateFeature }) => {
           <h1 className="page-title">Developer Dashboard</h1>
           <p className="page-subtitle">Track feedback and satisfaction trends for your deliveries</p>
         </div>
-        {onCreateFeature && (
+        {user && user.role === 'developer' && onCreateFeature && (
           <button 
             className="btn btn-primary"
             onClick={onCreateFeature}
@@ -271,7 +271,7 @@ const DeveloperDashboard = ({ user, onCreateFeature }) => {
                         ) : (
                           <>
                             <User size={14} />
-                            {feedback.clientName}
+                            {feedback.userName}
                           </>
                         )}
                       </div>

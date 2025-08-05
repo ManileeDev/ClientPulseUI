@@ -131,27 +131,29 @@ const FeatureManagement = ({ user }) => {
           <h1 className="page-title">Feature Management</h1>
           <p className="page-subtitle">Manage and track feature development ({filteredFeatures.length} features)</p>
         </div>
-        <button 
-          className="btn btn-primary"
-          onClick={() => setShowCreateFeature(true)}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '12px 20px',
-            background: 'var(--accent-primary)',
-            color: 'white',
-            border: 'none',
-            borderRadius: '8px',
-            fontWeight: '600',
-            cursor: 'pointer',
-            transition: 'all 0.2s',
-            fontSize: '14px'
-          }}
-        >
-          <Plus size={16} />
-          Create Feature
-        </button>
+        {user && user.role === 'developer' && (
+          <button 
+            className="btn btn-primary"
+            onClick={() => setShowCreateFeature(true)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '12px 20px',
+              background: 'var(--accent-primary)',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+              fontSize: '14px'
+            }}
+          >
+            <Plus size={16} />
+            Create Feature
+          </button>
+        )}
       </div>
 
       {/* Filters */}
@@ -223,13 +225,15 @@ const FeatureManagement = ({ user }) => {
               : "No features match the current filters. Try adjusting your search criteria."
             }
           </p>
-          <button 
-            className="btn btn-primary"
-            onClick={() => setShowCreateFeature(true)}
-          >
-            <Plus size={16} />
-            Create First Feature
-          </button>
+          {user && user.role === 'developer' && (
+            <button 
+              className="btn btn-primary"
+              onClick={() => setShowCreateFeature(true)}
+            >
+              <Plus size={16} />
+              Create First Feature
+            </button>
+          )}
         </div>
       ) : (
         <div className="features-grid">
@@ -237,18 +241,20 @@ const FeatureManagement = ({ user }) => {
             <div key={feature._id} className="feature-card">
               <div className="feature-header">
                 <h3 className="feature-title">{feature.name}</h3>
-                                 <div className="feature-actions">
-                   <button 
-                     className="action-btn" 
-                     title="Edit"
-                     onClick={() => handleEdit(feature)}
-                   >
-                     <Edit size={16} />
-                   </button>
-                   <button className="action-btn" title="Archive">
-                     <Archive size={16} />
-                   </button>
-                 </div>
+                                                 {user && user.role === 'developer' && (
+                  <div className="feature-actions">
+                    <button 
+                      className="action-btn" 
+                      title="Edit"
+                      onClick={() => handleEdit(feature)}
+                    >
+                      <Edit size={16} />
+                    </button>
+                    <button className="action-btn" title="Archive">
+                      <Archive size={16} />
+                    </button>
+                  </div>
+                )}
               </div>
               
               <p className="feature-description">{feature.description}</p>
@@ -327,7 +333,7 @@ const FeatureManagement = ({ user }) => {
       )}
 
       {/* Create/Edit Feature Modal */}
-      {(showCreateFeature || editingFeature) && (
+      {user && user.role === 'developer' && (showCreateFeature || editingFeature) && (
         <CreateFeature
           user={user}
           editingFeature={editingFeature}

@@ -65,8 +65,6 @@ const CreateFeature = ({ user, onFeatureCreated, onFeatureUpdated, onClose, edit
         tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag) : []
       };
 
-      console.log(editingFeature ? 'Updating feature with data:' : 'Creating feature with data:', submitData);
-
       const response = editingFeature 
         ? await featureAPI.update(editingFeature._id, submitData)
         : await featureAPI.create(submitData);

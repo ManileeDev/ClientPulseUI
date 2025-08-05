@@ -50,13 +50,11 @@ const apiRequest = async (endpoint, options = {}) => {
 export const authAPI = {
   // Register new user (sends OTP)
   register: async (userData) => {
-    console.log('Frontend: Attempting registration with:', userData);
     try {
       const response = await apiRequest('/signup', {
         method: 'POST',
         body: userData,
       });
-      console.log('Frontend: Registration response:', response);
       return response;
     } catch (error) {
       console.error('Frontend: Registration error:', error);
@@ -66,13 +64,11 @@ export const authAPI = {
 
   // Verify OTP and complete registration
   verifyOTP: async (email, otp) => {
-    console.log('Frontend: Attempting OTP verification for:', email);
     try {
       const response = await apiRequest('/validate-otp', {
         method: 'POST',
         body: { email, otp },
       });
-      console.log('Frontend: OTP verification response:', response);
       return response;
     } catch (error) {
       console.error('Frontend: OTP verification error:', error);
@@ -82,13 +78,11 @@ export const authAPI = {
 
   // Resend OTP
   resendOTP: async (email) => {
-    console.log('Frontend: Resending OTP for:', email);
     try {
       const response = await apiRequest('/generate-otp', {
         method: 'POST',
         body: { email },
       });
-      console.log('Frontend: Resend OTP response:', response);
       return response;
     } catch (error) {
       console.error('Frontend: Resend OTP error:', error);
@@ -98,13 +92,11 @@ export const authAPI = {
 
   // Login user
   login: async (credentials) => {
-    console.log('Frontend: Attempting login with:', { email: credentials.email, password: '***' });
     try {
       const response = await apiRequest('/login', {
         method: 'POST',
         body: credentials,
       });
-      console.log('Frontend: Login response:', response);
       return response;
     } catch (error) {
       console.error('Frontend: Login error:', error);
@@ -130,9 +122,7 @@ export const feedbackAPI = {
 
   // Get feedback by user ID
   getByUserId: async (userId) => {
-    console.log('API: Fetching feedback for user ID:', userId);
     const response = await apiRequest(`/feedback/user/${userId}`);
-    console.log('API: User feedback response:', response);
     return response;
   },
 

@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X, User, Mail, Lock, UserPlus, LogIn } from 'lucide-react';
 import { authAPI } from '../services/api';
 
-const AuthModal = ({ isOpen, onClose, onAuthSuccess }) => {
+const AuthModal = ({ isOpen, onClose, onAuthSuccess, forceLoginMode = false }) => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -15,6 +15,13 @@ const AuthModal = ({ isOpen, onClose, onAuthSuccess }) => {
     role: 'client'
   });
 
+  // Force login mode when specified (e.g., after successful registration)
+  useEffect(() => {
+    if (forceLoginMode && isOpen) {
+      setIsLogin(true);
+    }
+  }, [forceLoginMode, isOpen]);
+
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
@@ -25,22 +32,18 @@ const AuthModal = ({ isOpen, onClose, onAuthSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('AuthModal: Form submission started', { isLogin, formData });
     setLoading(true);
     setError('');
 
     try {
       let response;
       if (isLogin) {
-        console.log('AuthModal: Attempting login...');
         response = await authAPI.login({
           email: formData.email,
           password: formData.password
         });
 
         if (response.success) {
-          console.log('AuthModal: Login success - calling onAuthSuccess');
-          console.log('AuthModal: Token in response:', response.token ? 'Yes' : 'No');
           
           // Pass both user data and token
           const userDataWithToken = {
@@ -55,7 +58,6 @@ const AuthModal = ({ isOpen, onClose, onAuthSuccess }) => {
           setError(response.message || 'Login failed');
         }
       } else {
-        console.log('AuthModal: Attempting registration...');
         response = await authAPI.register({
           fullname: formData.name,
           email: formData.email,
@@ -64,7 +66,6 @@ const AuthModal = ({ isOpen, onClose, onAuthSuccess }) => {
         });
 
         if (response.success && response.otpSent) {
-          console.log('AuthModal: Registration initiated - OTP sent');
           
           // Show success toast for OTP sent
           if (window.showToast) {
