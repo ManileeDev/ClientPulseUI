@@ -110,8 +110,8 @@ const Analytics = () => {
       <div className="grid grid-2">
         <div className="card">
           <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
-            <Users size={24} style={{ color: '#667eea', marginRight: '0.5rem' }} />
-            <h3 style={{ margin: 0, color: '#2d3748' }}>Total Feedback</h3>
+            <Users size={24} style={{ color: 'var(--accent-primary)', marginRight: '0.5rem' }} />
+            <h3 style={{ margin: 0, color: 'var(--text-primary)' }}>Total Feedback</h3>
           </div>
           <div className="stats-number">{metrics.totalFeedback}</div>
           <div className="stats-label">Feedback submissions</div>
@@ -119,8 +119,8 @@ const Analytics = () => {
 
         <div className="card">
           <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
-            <Award size={24} style={{ color: '#667eea', marginRight: '0.5rem' }} />
-            <h3 style={{ margin: 0, color: '#2d3748' }}>Average Rating</h3>
+            <Award size={24} style={{ color: 'var(--accent-primary)', marginRight: '0.5rem' }} />
+            <h3 style={{ margin: 0, color: 'var(--text-primary)' }}>Average Rating</h3>
           </div>
           <div className="stats-number">{metrics.avgRating}/5</div>
           <div className="stats-label">User satisfaction</div>
@@ -129,7 +129,7 @@ const Analytics = () => {
         <div className="card">
           <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
             <TrendingUp size={24} style={{ color: '#10B981', marginRight: '0.5rem' }} />
-            <h3 style={{ margin: 0, color: '#2d3748' }}>High Ratings</h3>
+            <h3 style={{ margin: 0, color: 'var(--text-primary)' }}>High Ratings</h3>
           </div>
           <div className="stats-number">{metrics.highRatings}</div>
           <div className="stats-label">4-5 star ratings</div>
@@ -138,7 +138,7 @@ const Analytics = () => {
         <div className="card">
           <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
             <Target size={24} style={{ color: '#F59E0B', marginRight: '0.5rem' }} />
-            <h3 style={{ margin: 0, color: '#2d3748' }}>Low Ratings</h3>
+            <h3 style={{ margin: 0, color: 'var(--text-primary)' }}>Low Ratings</h3>
           </div>
           <div className="stats-number">{metrics.lowRatings}</div>
           <div className="stats-label">1-2 star ratings</div>
@@ -147,16 +147,16 @@ const Analytics = () => {
 
       {/* Rating Distribution */}
       <div className="card">
-        <h2 style={{ color: '#2d3748', marginBottom: '1.5rem' }}>Rating Distribution</h2>
+        <h2 style={{ color: 'var(--text-primary)', marginBottom: '1.5rem' }}>Rating Distribution</h2>
         <div style={{ display: 'grid', gap: '1rem' }}>
           
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontWeight: '600' }}>⭐⭐⭐⭐⭐ Excellent</span>
+            <span style={{ fontWeight: '600', color: 'var(--text-primary)' }}>⭐⭐⭐⭐⭐ Excellent</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <div style={{ 
                 width: '200px', 
                 height: '8px', 
-                backgroundColor: '#e2e8f0', 
+                backgroundColor: 'var(--border-color)', 
                 borderRadius: '4px',
                 overflow: 'hidden'
               }}>
@@ -166,19 +166,19 @@ const Analytics = () => {
                   backgroundColor: '#10B981' 
                 }} />
               </div>
-              <span style={{ fontWeight: '600', minWidth: '40px' }}>
+              <span style={{ fontWeight: '600', minWidth: '40px', color: 'var(--text-primary)' }}>
                 {ratingDistribution.excellent}
               </span>
             </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontWeight: '600' }}>⭐⭐⭐⭐ Good</span>
+            <span style={{ fontWeight: '600', color: 'var(--text-primary)' }}>⭐⭐⭐⭐ Good</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <div style={{ 
                 width: '200px', 
                 height: '8px', 
-                backgroundColor: '#e2e8f0', 
+                backgroundColor: 'var(--border-color)', 
                 borderRadius: '4px',
                 overflow: 'hidden'
               }}>
@@ -188,19 +188,19 @@ const Analytics = () => {
                   backgroundColor: '#3B82F6' 
                 }} />
               </div>
-              <span style={{ fontWeight: '600', minWidth: '40px' }}>
+              <span style={{ fontWeight: '600', minWidth: '40px', color: 'var(--text-primary)' }}>
                 {ratingDistribution.good}
               </span>
             </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontWeight: '600' }}>⭐⭐⭐ Okay</span>
+            <span style={{ fontWeight: '600', color: 'var(--text-primary)' }}>⭐⭐⭐ Okay</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <div style={{ 
                 width: '200px', 
                 height: '8px', 
-                backgroundColor: '#e2e8f0', 
+                backgroundColor: 'var(--border-color)', 
                 borderRadius: '4px',
                 overflow: 'hidden'
               }}>
@@ -210,19 +210,19 @@ const Analytics = () => {
                   backgroundColor: '#F59E0B' 
                 }} />
               </div>
-              <span style={{ fontWeight: '600', minWidth: '40px' }}>
+              <span style={{ fontWeight: '600', minWidth: '40px', color: 'var(--text-primary)' }}>
                 {ratingDistribution.okay}
               </span>
             </div>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontWeight: '600' }}>⭐⭐ Poor</span>
+            <span style={{ fontWeight: '600', color: 'var(--text-primary)' }}>⭐⭐ Poor</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <div style={{ 
                 width: '200px', 
                 height: '8px', 
-                backgroundColor: '#e2e8f0', 
+                backgroundColor: 'var(--border-color)', 
                 borderRadius: '4px',
                 overflow: 'hidden'
               }}>
@@ -232,7 +232,7 @@ const Analytics = () => {
                   backgroundColor: '#EF4444' 
                 }} />
               </div>
-              <span style={{ fontWeight: '600', minWidth: '40px' }}>
+              <span style={{ fontWeight: '600', minWidth: '40px', color: 'var(--text-primary)' }}>
                 {ratingDistribution.poor}
               </span>
             </div>
@@ -243,22 +243,22 @@ const Analytics = () => {
 
       {/* Recent Feedback Preview */}
       <div className="card">
-        <h2 style={{ color: '#2d3748', marginBottom: '1.5rem' }}>Recent Feedback</h2>
+        <h2 style={{ color: 'var(--text-primary)', marginBottom: '1.5rem' }}>Recent Feedback</h2>
         {feedback.length === 0 ? (
           <div className="text-center">
-            <p style={{ color: '#718096' }}>No feedback data available yet.</p>
+            <p style={{ color: 'var(--text-secondary)' }}>No feedback data available yet.</p>
           </div>
         ) : (
           <div style={{ display: 'grid', gap: '1rem' }}>
             {feedback.slice(0, 5).map((item, index) => (
               <div key={index} style={{ 
                 padding: '1rem', 
-                backgroundColor: '#f7fafc', 
+                backgroundColor: 'var(--input-bg)', 
                 borderRadius: '8px',
-                border: '1px solid #e2e8f0'
+                border: '1px solid var(--border-color)'
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                  <h4 style={{ margin: 0, color: '#2d3748' }}>{item.title || 'Feedback'}</h4>
+                  <h4 style={{ margin: 0, color: 'var(--text-primary)' }}>{item.title || 'Feedback'}</h4>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <span style={{ 
                       backgroundColor: item.rating >= 4 ? '#10B981' : item.rating >= 3 ? '#F59E0B' : '#EF4444',
@@ -272,10 +272,10 @@ const Analytics = () => {
                     </span>
                   </div>
                 </div>
-                <p style={{ margin: 0, color: '#4a5568', fontSize: '0.875rem' }}>
+                <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
                   {item.description || 'No description provided'}
                 </p>
-                <div style={{ marginTop: '0.5rem', fontSize: '0.75rem', color: '#718096' }}>
+                <div style={{ marginTop: '0.5rem', fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>
                   {item.category && (
                     <span style={{ marginRight: '1rem' }}>Category: {item.category}</span>
                   )}

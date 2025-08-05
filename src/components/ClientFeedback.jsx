@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Send, Star, Heart, ThumbsUp, Meh, ThumbsDown, LogIn, AlertCircle, Loader } from 'lucide-react'
-import { feedbackAPI, configAPI } from '../services/api'
+import { feedbackAPI, configAPI, featureAPI } from '../services/api'
 
 const ClientFeedback = ({ user, onOpenAuth }) => {
-  const [title, setTitle] = useState('')
+  const [selectedFeature, setSelectedFeature] = useState('')
   const [description, setDescription] = useState('')
   const [category, setCategory] = useState('')
   const [priority, setPriority] = useState('medium')
@@ -13,6 +13,7 @@ const ClientFeedback = ({ user, onOpenAuth }) => {
   const [error, setError] = useState('')
   
   // Dynamic data from API
+  const [features, setFeatures] = useState([])
   const [categories, setCategories] = useState([])
   const [priorityOptions, setPriorityOptions] = useState([])
   const [ratingOptions, setRatingOptions] = useState([])
@@ -23,13 +24,18 @@ const ClientFeedback = ({ user, onOpenAuth }) => {
     const fetchConfigurations = async () => {
       try {
         setLoading(true)
-        const [categoriesRes, prioritiesRes, ratingsRes] = await Promise.all([
+        const [featuresRes, categoriesRes, prioritiesRes, ratingsRes] = await Promise.all([
+          featureAPI.getAll(),
           configAPI.getFeedbackCategories(),
           configAPI.getPriorityOptions(),
           configAPI.getRatingOptions()
         ])
 
         // Transform API data to component format
+        if (featuresRes.success) {
+          setFeatures(featuresRes.features.filter(feature => !feature.isArchived))
+        }
+
         if (categoriesRes.success) {
           setCategories(categoriesRes.categories.map(cat => ({
             value: cat.value,
@@ -47,20 +53,23 @@ const ClientFeedback = ({ user, onOpenAuth }) => {
         }
 
         if (ratingsRes.success) {
-          const iconMap = {
-            'Heart': Heart,
-            'ThumbsUp': ThumbsUp,
-            'Meh': Meh,
-            'ThumbsDown': ThumbsDown,
-            'Star': Star
+          // Direct mapping by rating value to ensure correct emojis
+          const ratingEmojiMap = {
+            5: '😍',  // Excellent
+            4: '👍',  // Good  
+            3: '😐',  // Okay
+            2: '👎',  // Poor
+            1: '😢'   // Very Poor
           }
           
-          setRatingOptions(ratingsRes.ratings.map(rating => ({
+          const mappedRatings = ratingsRes.ratings.map(rating => ({
             value: rating.value,
-            icon: iconMap[rating.metadata?.icon] || Star,
+            emoji: ratingEmojiMap[rating.value] || '😍',
             label: rating.name,
             color: rating.metadata?.color || '#6B7280'
-          })).sort((a, b) => b.value - a.value)) // Sort high to low
+          })).sort((a, b) => b.value - a.value)
+          
+          setRatingOptions(mappedRatings)
         }
 
 
@@ -70,6 +79,11 @@ const ClientFeedback = ({ user, onOpenAuth }) => {
         setError('Failed to load form options. Please refresh the page.')
         
         // Fallback to static data if API fails
+        setFeatures([
+          { _id: '1', name: 'Sample Feature 1', status: 'completed' },
+          { _id: '2', name: 'Sample Feature 2', status: 'planned' }
+        ])
+        
         setCategories([
           { value: 'bug_report', label: 'Bug Report', description: 'Report a bug or issue' },
           { value: 'feature_request', label: 'Feature Request', description: 'Suggest a new feature' },
@@ -84,13 +98,15 @@ const ClientFeedback = ({ user, onOpenAuth }) => {
           { value: 'high', label: 'High', color: '#EF4444' }
         ])
         
-        setRatingOptions([
-          { value: 5, icon: Heart, label: 'Excellent', color: '#10B981' },
-          { value: 4, icon: ThumbsUp, label: 'Good', color: '#3B82F6' },
-          { value: 3, icon: Meh, label: 'Okay', color: '#F59E0B' },
-          { value: 2, icon: ThumbsDown, label: 'Poor', color: '#EF4444' },
-          { value: 1, icon: Star, label: 'Very Poor', color: '#7F1D1D' }
-        ])
+        const fallbackRatings = [
+          { value: 5, emoji: '😍', label: 'Excellent', color: '#10B981' },
+          { value: 4, emoji: '👍', label: 'Good', color: '#3B82F6' },
+          { value: 3, emoji: '😐', label: 'Okay', color: '#F59E0B' },
+          { value: 2, emoji: '👎', label: 'Poor', color: '#EF4444' },
+          { value: 1, emoji: '😢', label: 'Very Poor', color: '#7F1D1D' }
+        ]
+        
+        setRatingOptions(fallbackRatings)
 
       } finally {
         setLoading(false)
@@ -113,7 +129,7 @@ const ClientFeedback = ({ user, onOpenAuth }) => {
     
     try {
       const feedbackData = {
-        title,
+        featureId: selectedFeature,
         description,
         category,
         priority,
@@ -129,7 +145,7 @@ const ClientFeedback = ({ user, onOpenAuth }) => {
         
         // Reset form after success
         setTimeout(() => {
-          setTitle('')
+          setSelectedFeature('')
           setDescription('')
           setCategory('')
           setPriority('medium')
@@ -214,17 +230,25 @@ const ClientFeedback = ({ user, onOpenAuth }) => {
       
       <div className="card">
         <form onSubmit={handleSubmit}>
-          {/* Title */}
+          {/* Feature Selection */}
           <div className="form-group">
-            <label className="form-label">Feedback Title</label>
-            <input
-              type="text"
-              className="form-input"
-              placeholder="Brief title for your feedback..."
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+            <label className="form-label">Select Feature</label>
+            <select 
+              className="form-select"
+              value={selectedFeature}
+              onChange={(e) => setSelectedFeature(e.target.value)}
               required
-            />
+            >
+              <option value="">Choose a feature to give feedback on...</option>
+              {features.map(feature => (
+                <option key={feature._id} value={feature._id}>
+                  {feature.name} ({feature.status})
+                </option>
+              ))}
+            </select>
+            <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
+              Select the feature you want to provide feedback about
+            </p>
           </div>
 
 
@@ -279,33 +303,43 @@ const ClientFeedback = ({ user, onOpenAuth }) => {
 
           {/* Rating Selection */}
           <div className="form-group">
-            <label className="form-label">Overall Rating (Optional)</label>
+            <label className="form-label">How do you feel about this feature? 😊 (Optional)</label>
             <div className="rating-group">
-              {ratingOptions.map(option => {
-                const IconComponent = option.icon
-                return (
-                  <button
-                    key={option.value}
-                    type="button"
-                    className={`rating-btn ${rating === option.value ? 'active' : ''}`}
-                    onClick={() => setRating(option.value)}
-                    style={rating === option.value ? { 
-                      borderColor: option.color, 
-                      backgroundColor: option.color 
-                    } : {}}
-                  >
-                    <IconComponent size={24} />
-                  </button>
-                )
-              })}
+              {ratingOptions.map(option => (
+                <button
+                  key={option.value}
+                  type="button"
+                  className={`rating-btn ${rating === option.value ? 'active' : ''}`}
+                  onClick={() => setRating(option.value)}
+                  style={rating === option.value ? { 
+                    borderColor: option.color, 
+                    backgroundColor: option.color,
+                    transform: 'scale(1.15)',
+                    boxShadow: `0 4px 15px ${option.color}30`
+                  } : {}}
+                  title={`${option.value} - ${option.label}`}
+                >
+                  {option.emoji}
+                </button>
+              ))}
             </div>
+            <p style={{ 
+              fontSize: '0.875rem', 
+              color: 'var(--text-secondary)', 
+              marginTop: '0.5rem',
+              textAlign: 'center'
+            }}>
+              Click an emoji to rate your experience
+            </p>
             {rating > 0 && (
               <p style={{ 
                 marginTop: '0.5rem', 
                 color: ratingOptions.find(r => r.value === rating)?.color,
-                fontWeight: '600'
+                fontWeight: '600',
+                textAlign: 'center',
+                fontSize: '1rem'
               }}>
-                {ratingOptions.find(r => r.value === rating)?.label}
+                {ratingOptions.find(r => r.value === rating)?.emoji} {ratingOptions.find(r => r.value === rating)?.label}
               </p>
             )}
           </div>
@@ -323,7 +357,7 @@ const ClientFeedback = ({ user, onOpenAuth }) => {
             <button 
               type="submit" 
               className="btn btn-primary"
-              disabled={!title || !category || !description || isSubmitting}
+              disabled={!selectedFeature || !category || !description || isSubmitting}
             >
               {isSubmitting ? (
                 <>

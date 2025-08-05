@@ -86,7 +86,6 @@ const MyFeedbacks = ({ user, onOpenAuth }) => {
     setIsSubmitting(true)
     try {
       const updateData = {
-        title: editingFeedback.title,
         description: editingFeedback.description,
         category: editingFeedback.category,
         priority: editingFeedback.priority,
@@ -233,16 +232,21 @@ const MyFeedbacks = ({ user, onOpenAuth }) => {
                   // Edit Form
                   <form onSubmit={handleSaveEdit} className="edit-form">
                     <div className="form-group">
-                      <label>Title</label>
+                      <label>Feature</label>
                       <input
                         type="text"
-                        value={editingFeedback.title}
-                        onChange={(e) => setEditingFeedback({
-                          ...editingFeedback,
-                          title: e.target.value
-                        })}
-                        required
+                        value={editingFeedback.featureName || editingFeedback.title}
+                        disabled
+                        style={{
+                          backgroundColor: 'var(--input-bg)',
+                          color: 'var(--text-secondary)',
+                          cursor: 'not-allowed',
+                          opacity: 0.7
+                        }}
                       />
+                      <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+                        Feature cannot be changed after feedback is submitted
+                      </p>
                     </div>
 
                     <div className="form-group">
@@ -258,7 +262,7 @@ const MyFeedbacks = ({ user, onOpenAuth }) => {
                       />
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
+                    <div className="form-grid">
                       <div className="form-group">
                         <label>Category</label>
                         <select
@@ -335,7 +339,7 @@ const MyFeedbacks = ({ user, onOpenAuth }) => {
                   // Display View
                   <div className="feedback-content">
                     <div className="feedback-header">
-                      <h3>{feedback.title}</h3>
+                      <h3>{feedback.featureName || feedback.title}</h3>
                       <div className="feedback-meta">
                         <span className="badge" style={{ backgroundColor: getPriorityColor(feedback.priority) }}>
                           {feedback.priority}
@@ -470,6 +474,12 @@ const MyFeedbacks = ({ user, onOpenAuth }) => {
           color: var(--text-primary);
         }
 
+        .form-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1rem;
+        }
+
         .form-group input,
         .form-group textarea,
         .form-group select {
@@ -479,6 +489,8 @@ const MyFeedbacks = ({ user, onOpenAuth }) => {
           background: var(--input-bg);
           color: var(--text-primary);
           font-size: 0.875rem;
+          width: 100%;
+          box-sizing: border-box;
         }
 
         .form-group input:focus,
@@ -534,6 +546,7 @@ const MyFeedbacks = ({ user, onOpenAuth }) => {
           .feedback-header {
             flex-direction: column;
             align-items: flex-start;
+            gap: 0.75rem;
           }
 
           .feedback-details {
@@ -541,8 +554,46 @@ const MyFeedbacks = ({ user, onOpenAuth }) => {
             gap: 0.5rem;
           }
 
+          .form-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+          }
+
           .form-actions {
             flex-direction: column;
+            gap: 0.75rem;
+          }
+
+          .form-actions .btn {
+            width: 100%;
+            justify-content: center;
+          }
+
+          .feedback-item {
+            padding: 1rem;
+          }
+
+          .form-group input,
+          .form-group textarea,
+          .form-group select {
+            font-size: 16px; /* Prevents zoom on iOS */
+            padding: 0.875rem;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .form-grid {
+            gap: 0.75rem;
+          }
+
+          .feedback-actions {
+            flex-direction: column;
+            gap: 0.5rem;
+          }
+
+          .feedback-actions .btn {
+            width: 100%;
+            justify-content: center;
           }
         }
       `}</style>

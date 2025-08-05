@@ -31,12 +31,12 @@ const DeveloperDashboard = ({ user, onCreateFeature }) => {
     fetchFeedback()
   }, [])
 
-  const ratingIcons = {
-    5: { icon: Heart, color: '#10B981', label: 'Excellent' },
-    4: { icon: ThumbsUp, color: '#3B82F6', label: 'Good' },
-    3: { icon: Meh, color: '#F59E0B', label: 'Okay' },
-    2: { icon: ThumbsDown, color: '#EF4444', label: 'Poor' },
-    1: { icon: Star, color: '#7F1D1D', label: 'Very Poor' }
+  const ratingEmojis = {
+    5: { emoji: '😍', color: '#10B981', label: 'Excellent' },
+    4: { emoji: '👍', color: '#3B82F6', label: 'Good' },
+    3: { emoji: '😐', color: '#F59E0B', label: 'Okay' },
+    2: { emoji: '👎', color: '#EF4444', label: 'Poor' },
+    1: { emoji: '😢', color: '#7F1D1D', label: 'Very Poor' }
   }
 
   // Extract unique values from actual feedback data
@@ -73,13 +73,14 @@ const DeveloperDashboard = ({ user, onCreateFeature }) => {
   }
 
   const renderFeedbackRating = (rating) => {
-    const ratingData = ratingIcons[rating]
+    const ratingData = ratingEmojis[rating]
     if (!ratingData) return null
     
-    const IconComponent = ratingData.icon
     return (
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-        <IconComponent size={20} color={ratingData.color} fill={ratingData.color} />
+        <span style={{ fontSize: '20px', lineHeight: 1 }}>
+          {ratingData.emoji}
+        </span>
         <span style={{ color: ratingData.color, fontWeight: '600' }}>
           {ratingData.label}
         </span>
@@ -193,8 +194,8 @@ const DeveloperDashboard = ({ user, onCreateFeature }) => {
       {/* Filters */}
       <div className="card">
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-          <Filter size={20} color="#667eea" />
-          <h3 style={{ color: '#2d3748', margin: 0 }}>Filter Feedback</h3>
+          <Filter size={20} color="var(--accent-primary)" />
+          <h3 style={{ color: 'var(--text-primary)', margin: 0 }}>Filter Feedback</h3>
         </div>
         
         <div className="grid grid-2">
@@ -235,17 +236,17 @@ const DeveloperDashboard = ({ user, onCreateFeature }) => {
       {/* Feedback List */}
       <div className="card">
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
-          <h2 style={{ color: '#2d3748', margin: 0 }}>
+          <h2 style={{ color: 'var(--text-primary)', margin: 0 }}>
             Recent Feedback ({filteredFeedback.length})
           </h2>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#718096' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)' }}>
             <TrendingUp size={18} />
             <span>Sorted by newest</span>
           </div>
         </div>
         
         {filteredFeedback.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '2rem', color: '#718096' }}>
+          <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-secondary)' }}>
             <MessageSquare size={48} style={{ marginBottom: '1rem', opacity: 0.5 }} />
             <p>No feedback found matching your filters</p>
           </div>
@@ -256,11 +257,11 @@ const DeveloperDashboard = ({ user, onCreateFeature }) => {
                 <div className="feedback-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.5rem' }}>
-                      <h4 style={{ color: '#2d3748', margin: 0 }}>{feedback.title}</h4>
+                      <h4 style={{ color: 'var(--text-primary)', margin: 0 }}>{feedback.title}</h4>
                       {renderFeedbackRating(feedback.rating)}
                     </div>
                     
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.85rem', color: '#718096' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                         {feedback.isAnonymous ? (
                           <>
@@ -292,9 +293,10 @@ const DeveloperDashboard = ({ user, onCreateFeature }) => {
                         <span style={{ 
                           padding: '0.25rem 0.5rem', 
                           borderRadius: '0.25rem', 
-                          backgroundColor: '#f3f4f6',
-                          color: '#374151',
-                          fontSize: '0.75rem'
+                          backgroundColor: 'var(--input-bg)',
+                          color: 'var(--text-primary)',
+                          fontSize: '0.75rem',
+                          border: '1px solid var(--border-color)'
                         }}>
                           {feedback.category?.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                         </span>
