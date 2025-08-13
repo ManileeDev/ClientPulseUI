@@ -1,6 +1,6 @@
 // Auto-detect environment based on current URL
-// export const API_BASE_URL = 'https://client-pulse-server.vercel.app/api'; // Replace with your actual backend URL
-export const API_BASE_URL = 'http://localhost:5000/api'; // Replace with your actual backend URL
+export const API_BASE_URL = 'https://client-pulse-server.vercel.app/api'; // Replace with your actual backend URL
+// export const API_BASE_URL = 'http://localhost:5000/api'; // Replace with your actual backend URL
 
   // Helper function to make API requests
 const apiRequest = async (endpoint, options = {}) => {
