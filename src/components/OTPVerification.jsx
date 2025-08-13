@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Shield, Mail, ArrowLeft, RefreshCw } from 'lucide-react';
+import { API_BASE_URL } from '../services/api';
 
 const OTPVerification = () => {
   const navigate = useNavigate();
@@ -59,6 +60,26 @@ const OTPVerification = () => {
     }
   };
 
+  const handlePaste = (e) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData('text');
+    const digits = pastedData.replace(/\D/g, '').slice(0, 4);
+    
+    if (digits.length > 0) {
+      const newOtp = ['', '', '', ''];
+      for (let i = 0; i < digits.length && i < 4; i++) {
+        newOtp[i] = digits[i];
+      }
+      setOtp(newOtp);
+      setError('');
+      
+      // Focus the last filled input or the next empty one
+      const focusIndex = Math.min(digits.length, 3);
+      const targetInput = document.getElementById(`otp-${focusIndex}`);
+      targetInput?.focus();
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const otpCode = otp.join('');
@@ -70,9 +91,8 @@ const OTPVerification = () => {
 
     setLoading(true);
     setError('');
-
     try {
-      const response = await fetch('http://localhost:5000/api/validate-otp', {
+      const response = await fetch(`${API_BASE_URL}/validate-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -119,7 +139,7 @@ const OTPVerification = () => {
     setCountdown(60);
 
     try {
-      const response = await fetch('http://localhost:5000/api/generate-otp', {
+      const response = await fetch(`${API_BASE_URL}/generate-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -197,6 +217,7 @@ const OTPVerification = () => {
                 value={digit}
                 onChange={(e) => handleOtpChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
+                onPaste={handlePaste}
                 className="otp-input"
                 disabled={loading}
               />
